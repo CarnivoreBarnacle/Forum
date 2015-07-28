@@ -3,7 +3,7 @@
 Yleisiä linkkejä:
 
 * [Linkki sovellukseeni](http://anttisai.users.cs.helsinki.fi/Forum/)
-* [Linkki dokumentaatiooni](https://github.com/CarnivoreBarnacle/Tsoha-Bootstrap/blob/master/doc/dokumentaatio.pdf)
+* [Linkki dokumentaatiooni](https://github.com/CarnivoreBarnacle/Tsoha-Bootstrap/blob/master/doc/Dokumentaatio.pdf)
 
 ## Työn aihe
 
