@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Edit thread</h1>
+
+  <form>
+    <div class="form-group">
+      <label>Name</label>
+      <input class="form-control" value="Some Thread" type="text">
+    </div>
+    <div class="form-group">
+      <label>Created</label>
+      <p class="form-control-static">01.01.2015</p>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+  </form>
+{% endblock %}
