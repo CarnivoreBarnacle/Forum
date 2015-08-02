@@ -1,1 +1,3 @@
--- Lisää DROP TABLE lauseet tähän tiedostoon
+DROP TABLE IF EXISTS ForumUser CASCADE;
+DROP TABLE IF EXISTS Thread CASCADE;
+DROP TABLE IF EXISTS Message CASCADE;
