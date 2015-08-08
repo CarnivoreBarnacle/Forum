@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{thread.name}}<br><small>Created: {{thread.created|date('d.m.Y H:i')}}</small></h1>
+  <!-- Painikkeet tähän -->
+  <p>
+    <a href="{{base_path}}/thread/{{thread.id}}/message/create" class="btn btn-success">Post message</a>
+  </p>
+  
+  <table class="table table-striped">
+      <tbody>
+          {% for message in messages %}
+          <tr>
+              <td>
+                  <a href="#">{{message.user_id}}</a>
+                  <br>{{message.created|date('d.m.Y H:i')}}<br>
+                  <a  href="{{base_path}}/message/{{message.id}}/edit" class="btn btn-default btn-sm">Edit</a>
+              </td>
+              <td>
+                  <p>{{message.content}}</p>
+                  {% if message.modified != message.created %}
+                  <p class="text-muted">Last modified: {{message.modified|date('d.m.Y H:i')}}</p>
+                  {% endif %}
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+{% endblock %}

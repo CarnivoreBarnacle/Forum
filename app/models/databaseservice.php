@@ -48,8 +48,23 @@ class DatabaseService{
                 'created' => $row['created'],
                 'modified' => $row['modified']
             ));
+        }else if($type == 'thread'){
+            return new Thread(array(
+                'id' => $row['id'],
+                'user_id' => $row['user_id'],
+                'name' => $row['name'],
+                'created' => $row['created'],
+                'lastpost' => $row['lastpost']
+            ));
+        }else if($type == 'forumuser'){
+            return new ForumUser(array(
+                'id' => $row['id'],
+                'username' => $row['username'],
+                'password' => $row['password'],
+                'registered' => $row['registered']
+            ));
         }else{
-            echo 'Something went wrong! Wrong type.';
+            echo 'Something went wrong! Wrong type!';
         }
     }
 }

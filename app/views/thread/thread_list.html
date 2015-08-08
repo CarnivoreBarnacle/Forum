@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Threads</h1>
+  
+    <p>
+        <a href="{{base_path}}/thread/create" class="btn btn-success">Create thread</a>
+    </p>
+
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <td></td>
+                <td>By</td>
+                <td>Created</td>
+                <td>Last post</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- list of threads --->
+            {% for thread in threads %}
+            <tr>
+                <td><a href="{{base_path}}/thread/{{thread.id}}">{{thread.name}}</a>
+                    <a href="{{base_path}}/thread/{{thread.id}}/edit" class="btn btn-link btn-sm">Edit</a></td>
+                <td><a href="#">{{thread.user_id}}</a></td>
+                <td>{{thread.created|date('d.m.Y H:i')}}</td>
+                <td>{{thread.lastpost|date('d.m.Y H:i')}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

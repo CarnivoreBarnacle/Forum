@@ -7,39 +7,31 @@
         // make-metodi renderöi app/views-kansiossa sijaitsevia tiedostoja
         View::make('index.html');
     }
-    
-    public static function threadList(){
-        View::make('thread_list.html');
-    }
-    
-    public static function threadShow(){
-        View::make('thread_show.html');
-    }
-    
-    public static function threadEdit(){
-        View::make('thread_edit.html');
-    }
-    
-    public static function postCreate(){
-        View::make('post_create.html');
-    }
-    
-    public static function postEdit(){
-        View::make('post_edit.html');
-    }
-    
+
     public static function login(){
         View::make('login.html');
     }
     
     
     public static function sandbox(){
-        $thread = Message::thread(1);
-        $all = Message::all();
-        $one = Message::find(1);
+        $threadmessages = Message::thread(1);
+        $messages = Message::all();
+        $message = Message::find(1);
         
+        $users = ForumUser::all();
+        $user = ForumUser::find(1);
+        
+        $threads = Thread::all();
+        $thread = Thread::find(1);
+        
+        Kint::dump($threadmessages);
+        Kint::dump($messages);
+        Kint::dump($message);
+        
+        Kint::dump($users);
+        Kint::dump($user);
+        
+        Kint::dump($threads);
         Kint::dump($thread);
-        Kint::dump($all);
-        Kint::dump($one);
     }
   }

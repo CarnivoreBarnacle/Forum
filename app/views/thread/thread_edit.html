@@ -5,15 +5,15 @@
   <form>
     <div class="form-group">
       <label>Name</label>
-      <input class="form-control" value="Some Thread" type="text">
+      <input class="form-control" value="{{thread.name}}" type="text">
     </div>
     <div class="form-group">
       <label>By</label>
-      <p class="form-control-static"><a href="#">User</a></p>
+      <p class="form-control-static"><a href="#">{{thread.user_id}}</a></p>
     </div>
     <div class="form-group">
       <label>Created</label>
-      <p class="form-control-static">01.01.2015 00:00</p>
+      <p class="form-control-static">{{thread.created|date('d.m.Y H:i')}}</p>
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary">Save</button>

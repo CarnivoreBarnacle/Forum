@@ -1,33 +1,46 @@
 <?php
 
+
   $routes->get('/', function() {
-      MainController::index();
-  });
-  
-  $routes->get('/threads', function(){
-      MainController::threadList();
-  });
-  
-  $routes->get('/threads/example', function(){
-      MainController::threadShow();
-  });
-  
-  $routes->get('/threads/example/edit', function(){
-      MainController::threadEdit();
-  });
-  
-  $routes->get('/threads/example/post', function(){
-      MainController::postCreate();
+      ThreadController::threadList();
   });
 
-  $routes->get('/threads/example/post/edit', function(){
-      MainController::postEdit();
+  //Thread
+  $routes->post('/thread', function(){
+      ThreadController::addThread();
+  });
+  
+  $routes->get('/thread', function(){
+      ThreadController::threadList();
+  });
+    
+  $routes->get('/thread/create', function(){
+      ThreadController::createThread();
   });
 
+  $routes->get('/thread/:id', function($id){
+      ThreadController::showThread($id);
+  });
+  
+  $routes->get('/thread/:id/edit', function($id){
+      ThreadController::editThread($id);
+  });
+  
+  
+  //Messages
+  $routes->get('/thread/:id/message/create', function($id){
+      MessageController::createMessage($id);
+  });
+  
+  $routes->post('/thread/:thread_id/message', function($thread_id){
+      MessageController::addMessage($thread_id);
+  });
+
+  
   $routes->get('/login', function(){
       MainController::login();
   });
-  
+
   $routes->get('/hiekkalaatikko', function(){
       MainController::sandbox(); 
   });
