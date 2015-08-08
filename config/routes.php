@@ -27,3 +27,7 @@
   $routes->get('/login', function(){
       MainController::login();
   });
+  
+  $routes->get('/hiekkalaatikko', function(){
+      MainController::sandbox(); 
+  });
