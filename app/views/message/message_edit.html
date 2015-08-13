@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "macros/forms.html" as forms %}
+
+{% block content %}
+    <h1>Edit message</h1>
+    
+    {{forms.list_errors(errors)}}
+  <form action="{{base_path}}/message/{{message.id}}/update" method="post">
+    <div class="form-group">
+      <label>Content</label>
+      <textarea name="content" class="form-control">{{message.content}}</textarea>
+    </div>
+    <div class="form-group">
+      <label>By</label>
+      <p class="form-control-static"><a href="#">{{message.user_id}}</a></p>
+    </div>
+    <div class="form-group">
+      <label>Created</label>
+      <p class="form-control-static">{{message.created|date('d.m.Y H:i')}}</p>
+    </div>
+    <div class="form-group">
+      <label>Last modified</label>
+      <p class="form-control-static">{{message.edited|date('d.m.Y H:i')}}</p>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+
+{{forms.destroy_button("#{base_path}/message/#{message.id}/destroy")}}
+    
+{% endblock %}

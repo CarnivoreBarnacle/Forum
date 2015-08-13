@@ -4,10 +4,29 @@
 class DatabaseService{
     
     
-    public static function get($statement, $type, $values = null){
+    public static function execute($statement, $values = null){
+        $query = DB::connection()->prepare($statement);
+        if($values == null){
+            $query->execute();
+        }else{
+            $query->execute($values);
+        }
+    }
+    
+    public static function save($statement, $values){
+        $query = DB::connection()->prepare($statement);
+        $query->execute($values);
+        
+        return $query->fetch();
+    }
+    
+    public static function get($statement, $type, $values = null, $single = FALSE){
         $rows = self::getQuery($statement, $values);
         $result = self::convert($rows, $type);
         
+        if($single){
+            return $result[0];
+        }
         return $result;
     }
     
@@ -26,14 +45,10 @@ class DatabaseService{
 
     
     private static function convert($rows, $type){
-        if(count($rows) == 1){
-            $result = self::parse($rows[0], $type);
-        }else{
-            $result = array();
-            foreach ($rows as $row){
-                $result[] = self::parse($row, $type);
-            }
-        }
+        $result = array();
+        foreach ($rows as $row){
+            $result[] = self::parse($row, $type);
+         }
         
         return $result;
     }

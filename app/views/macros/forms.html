@@ -1,0 +1,12 @@
+{% macro destroy_button(action, text) %}
+  <form method="post" action="{{action}}" style="display: inline-block;">
+    <button type="submit" class="btn btn-danger">{{text|default('Delete')}}</button>
+  </form> 
+{% endmacro %}
+
+
+{% macro list_errors(errors) %}
+    {% for error in errors %}
+    <p>{{error}}</p>
+    {% endfor %}
+{% endmacro %}

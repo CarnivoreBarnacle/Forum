@@ -5,6 +5,10 @@
     <p>
         <a href="{{base_path}}/thread/create" class="btn btn-success">Create thread</a>
     </p>
+    
+    <p>
+        {{message}}
+    </p>
 
     <table class="table table-condensed table-hover">
         <thead>
@@ -19,8 +23,10 @@
             <!-- list of threads --->
             {% for thread in threads %}
             <tr>
-                <td><a href="{{base_path}}/thread/{{thread.id}}">{{thread.name}}</a>
-                    <a href="{{base_path}}/thread/{{thread.id}}/edit" class="btn btn-link btn-sm">Edit</a></td>
+                <td>
+                    <a href="{{base_path}}/thread/{{thread.id}}">{{thread.name}}</a>
+                    <a href="{{base_path}}/thread/{{thread.id}}/edit" class="btn btn-link btn-sm">Edit</a>
+                </td>
                 <td><a href="#">{{thread.user_id}}</a></td>
                 <td>{{thread.created|date('d.m.Y H:i')}}</td>
                 <td>{{thread.lastpost|date('d.m.Y H:i')}}</td>

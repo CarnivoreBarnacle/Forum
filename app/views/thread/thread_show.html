@@ -17,7 +17,7 @@
               </td>
               <td>
                   <p>{{message.content}}</p>
-                  {% if message.modified != message.created %}
+                  {% if message.modified|date('Y.m.d.H.i') > message.created|date('Y.m.d.H.i') %}
                   <p class="text-muted">Last modified: {{message.modified|date('d.m.Y H:i')}}</p>
                   {% endif %}
               </td>

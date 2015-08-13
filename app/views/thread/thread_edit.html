@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% block content %}
-  <h1>Edit thread</h1>
+{% import "macros/forms.html" as forms %}
 
-  <form>
+{% block content %}
+  <h1>Edit a thread</h1>
+  
+  {{forms.list_errors(errors)}}
+  <form action="{{base_path}}/thread/{{thread.id}}/edit" method="post">
     <div class="form-group">
       <label>Name</label>
-      <input class="form-control" value="{{thread.name}}" type="text">
+      <input name="name" class="form-control" value="{{thread.name}}" type="text">
     </div>
     <div class="form-group">
       <label>By</label>
@@ -15,9 +18,14 @@
       <label>Created</label>
       <p class="form-control-static">{{thread.created|date('d.m.Y H:i')}}</p>
     </div>
+      <div class="form-group">
+      <label>Last post</label>
+      <p class="form-control-static">{{thread.lastpost|date('d.m.Y H:i')}}</p>
+    </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary">Save</button>
-      <button type="submit" class="btn btn-danger">Delete</button>
     </div>
   </form>
+  
+  {{forms.destroy_button("#{base_path}/thread/#{thread.id}/destroy")}}
 {% endblock %}
