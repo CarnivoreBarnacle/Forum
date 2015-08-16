@@ -23,8 +23,6 @@ class ThreadController extends BaseController{
     }
     
     public static function editThread($id){
-        $thread = Thread::find($id);
-        View::make('thread/thread_edit.html', array('thread' => $thread));
         if(BaseController::get_user_logged_in()){
             $thread = Thread::find($id);
             View::make('thread/thread_edit.html', array('thread' => $thread));
