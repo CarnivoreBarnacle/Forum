@@ -1,5 +1,6 @@
 create TABLE ForumUser(
     id SERIAL PRIMARY KEY,
+    userrole varchar(5) NOT NULL,
     username varchar(20) NOT NULL,
     password varchar(20) NOT NULL,
     registered DATE

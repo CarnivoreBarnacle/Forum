@@ -54,11 +54,17 @@
       MessageController::destroyMessage($id);
   });
 
-  
+  //Login
   $routes->get('/login', function(){
-      MainController::login();
+      LoginController::login();
   });
-
+  
+  $routes->post('/login', function(){
+      LoginController::handleLogin();
+  });
+  
+  
+  //Sandobx
   $routes->get('/hiekkalaatikko', function(){
       MainController::sandbox(); 
   });

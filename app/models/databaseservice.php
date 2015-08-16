@@ -24,7 +24,7 @@ class DatabaseService{
         $rows = self::getQuery($statement, $values);
         $result = self::convert($rows, $type);
         
-        if($single){
+        if($result && $single){
             return $result[0];
         }
         return $result;

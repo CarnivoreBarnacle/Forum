@@ -9,3 +9,7 @@ Yleisiä linkkejä:
 ## Työn aihe
 
 Foorumi on keskustelupalsta, jossa käyttäjät voivat luoda viestiketjuja, joissa he voivat keskustella viestien välityksellä.
+
+## Tunnukset
+Käyttäjänimi:test
+Salasana:1234

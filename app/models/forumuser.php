@@ -17,8 +17,19 @@ class ForumUser extends BaseModel{
     public static function find($id){
         $statement = 'SELECT * FROM forumuser WHERE id = :id';
         $values = array('id' => $id);
-        $user = DatabaseService::get($statement, 'forumuser', $values);
+        $user = DatabaseService::get($statement, 'forumuser', $values, TRUE);
         
         return $user;
+    }
+    
+    public function authenticate($username, $password){
+        $statement = 'SELECT * FROM forumuser WHERE username = :username AND password = :password';
+        $values = array('username' => $username, 'password' => $password);
+        $user = DatabaseService::get($statement, 'forumuser', $values, TRUE);
+        
+        if($user){
+            return $user;
+        }
+        return NULL;
     }
 }

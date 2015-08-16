@@ -3,13 +3,21 @@
 class MessageController extends BaseController{
     
     public static function createMessage($id){
-        $thread = Thread::find($id);
-        View::make('message/message_create.html', array('thread' => $thread));
+        if(BaseController::get_user_logged_in()){
+            $thread = Thread::find($id);
+            View::make('message/message_create.html', array('thread' => $thread));
+        }else{
+            Redirect::to('/login', array('errors' => array('Login to create a message.')));
+        }
     }
     
     public static function editMessage($id){
-        $message = Message::find($id);
-        View::make('message/message_edit.html', array('message' => $message));
+        if(BaseController::get_user_logged_in()){
+           $message = Message::find($id);
+            View::make('message/message_edit.html', array('message' => $message));
+        }else{
+            Redirect::to('/login', array('errors' => array('Login to edit a message.')));
+        }
     }
     
     
@@ -21,7 +29,7 @@ class MessageController extends BaseController{
         $attributes = array(
             'content' => $params['content'],
             'created' => $time,
-            'user_id' => 1,             ///PLACEHOLDER
+            'user_id' => $_SESSION['user'],
             'thread_id' => $thread_id
         );
         $message = new Message($attributes);
