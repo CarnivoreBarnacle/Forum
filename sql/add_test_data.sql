@@ -1,6 +1,6 @@
 --ForumUser
-INSERT INTO ForumUser (username, password, userrole, registered) VALUES ('test', '1234', 'ADMIN', NOW());
-INSERT INTO ForumUser (username, password, userrole, registered) VALUES ('test2', '1234', 'USER', NOW());
+INSERT INTO ForumUser (username, password, userrole, registered) VALUES ('admin', '1234', 'ADMIN', NOW());
+INSERT INTO ForumUser (username, password, userrole, registered) VALUES ('testuser', '1234', 'USER', NOW());
 
 --Thread
 INSERT INTO Thread (name, user_id, created, lastpost) VALUES ('Test thread', 1, NOW(), NOW());
