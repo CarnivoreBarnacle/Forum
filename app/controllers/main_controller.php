@@ -9,24 +9,10 @@
     }
 
     public static function sandbox(){
-        $threadmessages = Message::thread(1);
-        $messages = Message::all();
-        $message = Message::find(1);
+        $postedTo1 = ForumUser::findPostedTo(1);
+        $postedTo2 = ForumUser::findPostedTo(2);
         
-        $users = ForumUser::all();
-        $user = ForumUser::find(1);
-        
-        $threads = Thread::all();
-        $thread = Thread::find(1);
-        
-        Kint::dump($threadmessages);
-        Kint::dump($messages);
-        Kint::dump($message);
-        
-        Kint::dump($users);
-        Kint::dump($user);
-        
-        Kint::dump($threads);
-        Kint::dump($thread);
+        Kint::dump($postedTo1);
+        Kint::dump($postedTo2);
     }
   }

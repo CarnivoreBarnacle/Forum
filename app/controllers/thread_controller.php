@@ -15,6 +15,14 @@ class ThreadController extends BaseController{
         View::make('thread/thread_show.html', array('messages' => $messages, 'thread' => $thread, 'users' => $users));
     }
     
+    public static function postedTo($id){
+        $users = ForumUser::findUsersPostedTo($id);
+        $thread = Thread::find($id);
+        $amount = ForumUser::findAllPostsToThread($users, $id);
+        
+        View::make('thread/thread_posted.html', array('thread' => $thread  ,'users' => $users, 'amount' => $amount));
+    }
+    
     public static function createThread(){
         View::make('thread/thread_create.html');
     }

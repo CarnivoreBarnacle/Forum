@@ -34,6 +34,10 @@ class MessageController extends BaseController{
             $thread = Thread::find($thread_id);
             $thread->updateLastpost($time);
             
+            //Updating participants list
+            $user = ForumUser::find($_SESSION['user']);
+            $user->increasePostAmount($thread_id);
+            
             Redirect::to('/thread/'. $thread_id);
         }else{
             $thread = Thread::find($thread_id);

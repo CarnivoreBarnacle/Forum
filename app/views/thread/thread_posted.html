@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{thread.name}}<br><small>Created: {{thread.created|date('d.m.Y H:i')}}</small></h1>
+  
+  <h2>The following users have posted to this thread: </h2>
+  <table class="table table-striped">
+      <tbody>
+          {% for user in users|sort %}
+          <tr>
+              <td>
+                  <a href="{{base_path}}/user/{{user.id}}">{{user.username}}</a>
+                  ({{amount[user.id]}} message{% if amount[user.id] > 1 %}s{% endif %})
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+{% endblock %}

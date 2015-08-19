@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>{{thread.name}}<br><small>Created: {{thread.created|date('d.m.Y H:i')}}</small></h1>
+  <h1>{{thread.name}}<br><small>Created: {{thread.created|date('d.m.Y H:i')}}</small>
+      <br>
+      <a href="{{base_path}}/thread/{{thread.id}}/posted" class="btn btn-default">Participants</a>
+  </h1>
   <!-- Painikkeet tähän -->
   <p>
     <a href="{{base_path}}/thread/{{thread.id}}/message/create" class="btn btn-success">Post message</a>

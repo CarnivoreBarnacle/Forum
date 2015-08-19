@@ -9,11 +9,11 @@
   });
 
   //Thread
-  $routes->post('/thread', function(){
+  $routes->post('/thread','check_logged_in', function(){
       ThreadController::addThread();
   });
   $routes->post('/thread/:id/edit', function($id){
-      BaseController::check_rights($id);
+      BaseController::check_thread_rights($id);
       ThreadController::updateThread($id);
   });
   $routes->post('/thread/:id/destroy', function($id){
@@ -33,8 +33,12 @@
       ThreadController::showThread($id);
   });
   
+  $routes->get('/thread/:id/posted', function($id){
+      ThreadController::postedTo($id);
+  });
+  
   $routes->get('/thread/:id/edit', function($id){
-      BaseController::check_rights($id);
+      BaseController::check_thread_rights($id);
       ThreadController::editThread($id);
   });
   
@@ -45,21 +49,21 @@
   });
   
   $routes->get('/message/:id/edit', function($id){
-      BaseController::check_rights($id);
+      BaseController::check_message_rights($id);
       MessageController::editMessage($id);
   });
   
-  $routes->post('/thread/:thread_id/message', function($thread_id){
+  $routes->post('/thread/:thread_id/message','check_logged_in', function($thread_id){
       MessageController::addMessage($thread_id);
   });
   
   $routes->post('/message/:id/update', function($id){
-      BaseController::check_rights($id);
+      BaseController::check_message_rights($id);
       MessageController::updateMessage($id);
   });
   
   $routes->post('/message/:id/destroy', function($id){
-      BaseController::check_rights($id);
+      BaseController::check_message_rights($id);
       MessageController::destroyMessage($id);
   });
 

@@ -18,8 +18,19 @@
         }
     }
     
-    public static function check_rights($id){
+    public static function check_thread_rights($thread_id){
         $user = self::get_user_logged_in();
+        $id = Thread::find($thread_id)->user_id;
+        
+        if($user->userrole != 'ADMIN' && $user->id != $id){
+            Redirect::to('/', array('message' => 'You have no authority to perform that action.'));
+        }
+    }
+    
+    public static function check_message_rights($message_id){
+        $user = self::get_user_logged_in();
+        $id = Message::find($message_id)->user_id;
+        
         if($user->userrole != 'ADMIN' && $user->id != $id){
             Redirect::to('/', array('message' => 'You have no authority to perform that action.'));
         }

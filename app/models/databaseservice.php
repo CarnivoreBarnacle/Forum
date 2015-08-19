@@ -79,6 +79,8 @@ class DatabaseService{
                 'password' => $row['password'],
                 'registered' => $row['registered']
             ));
+        }else if ($type == 'postamount') {
+            return $row['amount'];
         }else{
             echo 'Something went wrong! Wrong type!';
         }

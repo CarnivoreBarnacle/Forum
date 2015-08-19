@@ -22,3 +22,16 @@ create TABLE Message(
     created TIMESTAMP,
     modified TIMESTAMP
 );
+
+
+create TABLE thread_user(
+    user_id INTEGER NOT NULL,
+    thread_id INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    CONSTRAINT thread_user_pk PRIMARY KEY (user_id, thread_id)
+);
+
+
+SELECT * FROM ForumUser
+INNER JOIN thread_user ON ForumUser.id = thread_user.user_id
+INNER JOIN Thread ON thread_user.thread_id = Thread.id;
