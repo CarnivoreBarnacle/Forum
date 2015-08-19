@@ -1,6 +1,9 @@
 <?php
 
-
+  function check_logged_in(){
+      BaseController::check_logged_in();
+  }
+  
   $routes->get('/', function() {
       ThreadController::threadList();
   });
@@ -10,9 +13,11 @@
       ThreadController::addThread();
   });
   $routes->post('/thread/:id/edit', function($id){
+      BaseController::check_rights($id);
       ThreadController::updateThread($id);
   });
   $routes->post('/thread/:id/destroy', function($id){
+      BaseController::check_admin();
       ThreadController::destroyThread($id);
   });
   
@@ -20,7 +25,7 @@
       ThreadController::threadList();
   });
     
-  $routes->get('/thread/create', function(){
+  $routes->get('/thread/create', 'check_logged_in', function(){
       ThreadController::createThread();
   });
 
@@ -29,16 +34,18 @@
   });
   
   $routes->get('/thread/:id/edit', function($id){
+      BaseController::check_rights($id);
       ThreadController::editThread($id);
   });
   
   
   //Messages
-  $routes->get('/thread/:id/message/create', function($id){
+  $routes->get('/thread/:id/message/create', 'check_logged_in', function($id){
       MessageController::createMessage($id);
   });
   
   $routes->get('/message/:id/edit', function($id){
+      BaseController::check_rights($id);
       MessageController::editMessage($id);
   });
   
@@ -47,10 +54,12 @@
   });
   
   $routes->post('/message/:id/update', function($id){
+      BaseController::check_rights($id);
       MessageController::updateMessage($id);
   });
   
   $routes->post('/message/:id/destroy', function($id){
+      BaseController::check_rights($id);
       MessageController::destroyMessage($id);
   });
 
@@ -61,6 +70,10 @@
   
   $routes->post('/login', function(){
       LoginController::handleLogin();
+  });
+  
+  $routes->post('/logout', function(){
+      LoginController::logout();
   });
   
   

@@ -3,25 +3,16 @@
 class MessageController extends BaseController{
     
     public static function createMessage($id){
-        if(BaseController::get_user_logged_in()){
-            $thread = Thread::find($id);
-            View::make('message/message_create.html', array('thread' => $thread));
-        }else{
-            Redirect::to('/login', array('errors' => array('Login to create a message.')));
-        }
+        $thread = Thread::find($id);
+        View::make('message/message_create.html', array('thread' => $thread));
     }
     
     public static function editMessage($id){
-        if(BaseController::get_user_logged_in()){
-           $message = Message::find($id);
-            View::make('message/message_edit.html', array('message' => $message));
-        }else{
-            Redirect::to('/login', array('errors' => array('Login to edit a message.')));
-        }
+        $message = Message::find($id);
+        View::make('message/message_edit.html', array('message' => $message));
     }
     
     
-    //TODO: make sure adding message updates the lastPost value of thread!!!!
     public static function addMessage($thread_id){
         $params = $_POST;
         $time = date('Y-m-d G:i:s');
@@ -38,7 +29,11 @@ class MessageController extends BaseController{
         
         if(count($errors) == 0){
             $message->save();
-
+            
+            //Updating lastpost of thread
+            $thread = Thread::find($thread_id);
+            $thread->updateLastpost($time);
+            
             Redirect::to('/thread/'. $thread_id);
         }else{
             $thread = Thread::find($thread_id);

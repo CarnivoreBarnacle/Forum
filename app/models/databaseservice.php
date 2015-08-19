@@ -74,6 +74,7 @@ class DatabaseService{
         }else if($type == 'forumuser'){
             return new ForumUser(array(
                 'id' => $row['id'],
+                'userrole' => $row['userrole'],
                 'username' => $row['username'],
                 'password' => $row['password'],
                 'registered' => $row['registered']

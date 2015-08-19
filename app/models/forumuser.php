@@ -1,7 +1,7 @@
 <?php
 
 class ForumUser extends BaseModel{
-    public $id, $username, $password, $registered;
+    public $id, $userrole, $username, $password, $registered;
     
     public function __construct($attributes) {
         parent::__construct($attributes);

@@ -14,21 +14,12 @@ class ThreadController extends BaseController{
     }
     
     public static function createThread(){
-        if(BaseController::get_user_logged_in()){
-            View::make('thread/thread_create.html');
-        
-        }else{
-            Redirect::to('/login', array('errors' => array('Login to create a thread.')));
-        }
+        View::make('thread/thread_create.html');
     }
     
     public static function editThread($id){
-        if(BaseController::get_user_logged_in()){
-            $thread = Thread::find($id);
-            View::make('thread/thread_edit.html', array('thread' => $thread));
-        }else{
-            Redirect::to('/login', array('errors' => array('Login to edit a thread.')));
-        }
+        $thread = Thread::find($id);
+        View::make('thread/thread_edit.html', array('thread' => $thread));
     }
     
     public static function addThread(){

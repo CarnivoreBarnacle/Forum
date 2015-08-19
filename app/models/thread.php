@@ -47,6 +47,13 @@ class Thread extends BaseModel{
         DatabaseService::save($statement, $values);
     }
     
+    public function updateLastpost($lastpost){
+        $statement = 'UPDATE thread SET lastpost=:lastpost WHERE id=:id';
+        $values = array('id' => $this->id, 'lastpost' => $lastpost);
+        
+        DatabaseService::save($statement, $values);
+    }
+    
     public function delete(){
         $statement1 = 'DELETE FROM thread WHERE id=:id';
         //To delete all messages posted to thread

@@ -26,6 +26,7 @@
       <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
-  
+  {% if user_logged_in.userrole == 'ADMIN'%}
   {{forms.destroy_button("#{base_path}/thread/#{thread.id}/destroy")}}
+  {% endif %}
 {% endblock %}
