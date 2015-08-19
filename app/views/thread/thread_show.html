@@ -11,7 +11,7 @@
           {% for message in messages %}
           <tr>
               <td>
-                  <a href="#">{{message.user_id}}</a>
+                  <a href="{{base_path}}/user/{{message.user_id}}">{{users[message.user_id]}}</a>
                   <br>{{message.created|date('d.m.Y H:i')}}<br>
                   {% if (user_logged_in.userrole == 'ADMIN' or user_logged_in.id == message.user_id) %}
                     <a  href="{{base_path}}/message/{{message.id}}/edit" class="btn btn-default btn-sm">Edit</a>

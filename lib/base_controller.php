@@ -31,4 +31,12 @@
             Redirect::to('/', array('message' => 'You have no authority to perform that action.'));
         }
     }
+    
+    public static function get_usernames_from($list){
+        $usernames = array();
+        foreach($list as $item){
+            $usernames[$item->user_id] = ForumUser::find($item->user_id)->username;
+        }
+        return $usernames;
+    }
   }

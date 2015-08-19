@@ -4,13 +4,15 @@ class ThreadController extends BaseController{
     
     public static function threadList(){
         $threads = Thread::all();
-        View::make('thread/thread_list.html', array('threads' => $threads));
+        $users = parent::get_usernames_from($threads);
+        View::make('thread/thread_list.html', array('threads' => $threads, 'users' => $users));
     }
-    
+      
     public static function showThread($id){
         $messages = Message::findByThread($id);
         $thread = Thread::find($id);
-        View::make('thread/thread_show.html', array('messages' => $messages, 'thread' => $thread));
+        $users = parent::get_usernames_from($messages);
+        View::make('thread/thread_show.html', array('messages' => $messages, 'thread' => $thread, 'users' => $users));
     }
     
     public static function createThread(){
