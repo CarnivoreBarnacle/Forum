@@ -1,5 +1,6 @@
 <?php
 
+//Controller responsible for viewing, adding, editing and removing messages
 class MessageController extends BaseController{
     
     public static function createMessage($id){
@@ -13,6 +14,8 @@ class MessageController extends BaseController{
     }
     
     
+    //Creating message
+    //Upon success saves message to database, updates the threads lastPost value and the participant list
     public static function addMessage($thread_id){
         $params = $_POST;
         $time = date('Y-m-d G:i:s');
@@ -31,24 +34,25 @@ class MessageController extends BaseController{
             $message->save();
             
             //Updating lastpost of thread
-            $thread = Thread::find($thread_id);
+            $thread = new Thread(Thread::find($thread_id));
             $thread->updateLastpost($time);
             
             //Updating participants list
-            $user = ForumUser::find($_SESSION['user']);
-            $user->increasePostAmount($thread_id);
+            $user = new ForumUser(ForumUser::find($_SESSION['user']));
+            ForumUser::changePostAmount($user->id, $thread_id, 1);
             
             Redirect::to('/thread/'. $thread_id);
         }else{
-            $thread = Thread::find($thread_id);
+            $thread = new Thread(Thread::find($thread_id));
             View::make('message/message_create.html', array('thread' => $thread, 'errors' => $errors, 'attributes' => $attributes));
         }
     }
     
+    //Editing message
     public static function updateMessage($id){
         $params = $_POST;
         $time = date('Y-m-d G:i:s');
-        $oldMessage = Message::find($id);
+        $oldMessage = new Message(Message::find($id));
         
         $attributes = $oldMessage->asArray();
         $attributes['id'] = $id;
@@ -68,9 +72,15 @@ class MessageController extends BaseController{
         }
     }
     
+    //Deleting message, also updates the participants list
     public static function destroyMessage($id){
-        $message = Message::find($id);
+        $message = new Message(Message::find($id));
+        $user_id = $message->user_id;
+        $thread_id = $message->thread_id;
         $message->delete();
+        
+        //Updating participants list
+        ForumUser::changePostAmount($user_id, $thread_id, -1);
         
         Redirect::to('/thread/' . $message->thread_id, array('message' => 'Message deleted.'));
     }

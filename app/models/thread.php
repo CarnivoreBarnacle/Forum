@@ -9,29 +9,42 @@ class Thread extends BaseModel{
         $this->validators = array('validateName');
     }
     
+    //Gets all thread from database
     public static function all(){
-        $statement = 'SELECT * FROM thread ORDER BY lastpost DESC';
-        $threads = DatabaseService::get($statement, 'thread');
+        $statement = 'SELECT thread.*, forumuser.username AS username'
+                . ' FROM thread LEFT JOIN forumuser'
+                . ' ON thread.user_id = forumuser.id'
+                . ' ORDER BY lastpost DESC';
+        $threads = DatabaseService::get($statement);
         
         return $threads;
     }
     
+    //Finds single thread from database by id
     public static function find($id){
-        $statement = 'SELECT * FROM thread WHERE id = :id';
+        $statement = 'SELECT thread.*, forumuser.username as username'
+                . ' FROM thread INNER JOIN forumuser'
+                . ' ON thread.user_id = forumuser.id'
+                . ' WHERE thread.id = :id';
         $values = array('id' => $id);
-        $thread = DatabaseService::get($statement, 'thread', $values, TRUE);
+        $thread = DatabaseService::get($statement, $values, TRUE);
         
         return $thread;
     }
     
+    //Finds thread created by user
     public static function findByUser($user_id){
-        $statement = 'SELECT * FROM thread WHERE user_id = :user_id ORDER BY created DESC';
+        $statement = 'SELECT thread.*, forumuser.username as username'
+                . ' FROM thread INNER JOIN forumuser'
+                . ' ON thread.user_id = forumuser.id'
+                . ' WHERE thread.user_id = :user_id';
         $values = array('user_id' => $user_id);
-        $thread = DatabaseService::get($statement, 'thread', $values);
+        $thread = DatabaseService::get($statement, $values);
         
         return $thread;
     }
     
+    //Saves thread
     public function save(){
         $statement = 'INSERT INTO thread (user_id, name, created, lastpost) VALUES (:user_id, :name, :created, :lastpost) RETURNING id';
         $values = $this->asArray();
@@ -40,6 +53,7 @@ class Thread extends BaseModel{
         $this->id = $row['id'];
     }
     
+    //Updates thread
     public function update(){
         $statement = 'UPDATE thread SET name=:name WHERE id=:id';
         $values = array('id' => $this->id, 'name' => $this->name);
@@ -47,6 +61,7 @@ class Thread extends BaseModel{
         DatabaseService::save($statement, $values);
     }
     
+    //Updates lastPost value of thread (called when creating message)
     public function updateLastpost($lastpost){
         $statement = 'UPDATE thread SET lastpost=:lastpost WHERE id=:id';
         $values = array('id' => $this->id, 'lastpost' => $lastpost);
@@ -54,6 +69,8 @@ class Thread extends BaseModel{
         DatabaseService::save($statement, $values);
     }
     
+    //Removes thread and every message related to it
+    //TODO: Remove assosiated thread_user rows as well
     public function delete(){
         $statement1 = 'DELETE FROM thread WHERE id=:id';
         //To delete all messages posted to thread

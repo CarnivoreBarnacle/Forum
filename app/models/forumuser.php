@@ -7,76 +7,97 @@ class ForumUser extends BaseModel{
         parent::__construct($attributes);
     }
     
+    //Return all user from database (UNUSED)
     public static function all(){
         $statement = 'SELECT * FROM forumuser';
-        $users = DatabaseService::get($statement, 'forumuser');
+        $users = DatabaseService::get($statement);
         
         return $users;
     }
     
+    //Finds single user by id
     public static function find($id){
         $statement = 'SELECT * FROM forumuser WHERE id = :id';
         $values = array('id' => $id);
-        $user = DatabaseService::get($statement, 'forumuser', $values, TRUE);
+        $user = DatabaseService::get($statement, $values, TRUE);
         
         return $user;
     }
     
+    //Saves user to database
+    public function save(){
+        $statement = 'INSERT INTO forumuser (userrole, username, password, registered) VALUES (:userrole, :username, :password, :registered) RETURNING id';
+        $values = $this->asArray();
+        
+        $row = DatabaseService::save($statement, $values);
+        $this->id = $row['id'];
+    }
+    
+    //Check wheter database contains user matching username, password
     public function authenticate($username, $password){
         $statement = 'SELECT * FROM forumuser WHERE username = :username AND password = :password';
         $values = array('username' => $username, 'password' => $password);
-        $user = DatabaseService::get($statement, 'forumuser', $values, TRUE);
+        $user = DatabaseService::get($statement, $values, TRUE);
         
         if($user){
-            return $user;
+            return new ForumUser($user);
         }
         return NULL;
     }
-    
-    
+
     //Functions relating to many to many connection between thread and user
     
-    public static function findUsersPostedTo($thread_id){
-        $statement = 'SELECT * FROM forumuser WHERE id IN (SELECT user_id FROM thread_user WHERE thread_id=:thread_id)';
+    //Finds user who have participated to a thread and the amount of posts they have made to it
+    public static function findParticipants($thread_id){
+        $statement = 'SELECT forumuser.id, forumuser.username, thread_user.amount FROM forumuser '
+                . ' INNER JOIN thread_user'
+                . ' ON forumuser.id = thread_user.user_id'
+                . ' WHERE thread_user.thread_id = :thread_id';
         $values = array('thread_id' => $thread_id);
         
-        $users = DatabaseService::get($statement, 'forumuser', $values);
+        $users = DatabaseService::get($statement, $values);
         
         return $users;
     }
     
-    public static function findAllPostsToThread($users, $thread_id){
-        $statement = 'SELECT amount FROM thread_user WHERE user_id=:user_id AND thread_id=:thread_id';
+    //Change the number of posts to thread user has made
+    //If no previous row exists, inserts new one
+    //If amount drops to 0 removes the row
+    public static function changePostAmount($user_id, $thread_id, $change){
+        $res = self::findNumberOfMessages($user_id, $thread_id);
+        if($res == NULL){
+            $statement = 'INSERT INTO thread_user (user_id, thread_id, amount) VALUES (:user_id, :thread_id, :amount) ';
+            $amount = 0;
+        }else{
+            $statement = 'UPDATE thread_user SET amount=:amount WHERE thread_id=:thread_id AND user_id=:user_id';
+            $amount = $res['amount'];
+        }
+        $amount += $change;
         
-        $amount = array();
-        foreach($users as $user){
-            $values = array('user_id' => $user->id, 'thread_id' => $thread_id);
-            $amount[$user->id] = DatabaseService::get($statement, 'postamount', $values, True);
+        if($amount <= 0){
+            self::deleteParticipation($user_id, $thread_id);
+            return;
         }
         
-        return $amount;
+        $values = array('amount' => $amount, 'thread_id' => $thread_id, 'user_id' => $user_id);
+        DatabaseService::save($statement, $values);
     }
     
-    public static function findPostsToThread($user_id, $thread_id){
-        $statement = 'SELECT amount FROM thread_user WHERE user_id=:user_id AND thread_id=:thread_id';
+    //Finds how many messages user has posted to thread
+    private static function findNumberOfMessages($user_id, $thread_id){
+        $statement = 'SELECT amount FROM thread_user WHERE user_id = :user_id AND thread_id = :thread_id';
         $values = array('user_id' => $user_id, 'thread_id' => $thread_id);
         
-        $amount = DatabaseService::get($statement, 'postamount', $values, True);
+        $result = DatabaseService::get($statement, $values, TRUE);
         
-        return $amount;
+        return $result;
     }
     
-    public function increasePostAmount($thread_id){
-        $amount = self::findPostsToThread($this->id, $thread_id);
-        if($amount == NULL){
-            $amount = 1;
-        }else{
-            $amount++;
-        }
+    //Removes row from thread_user-table
+    private static function deleteParticipation($user_id, $thread_id){
+        $statement = 'DELETE FROM thread_user WHERE user_id = :user_id AND thread_id = :thread_id';
+        $values = array('user_id' => $user_id, 'thread_id' => $thread_id);
         
-        $statement = 'UPDATE thread_user SET amount=:amount WHERE thread_id=:thread_id AND user_id=:user_id';
-        $values = array('amount' => $amount, 'thread_id' => $thread_id, 'user_id' => $this->id);
-        
-        DatabaseService::save($statement, $values);
+        DatabaseService::execute($statement, $values);
     }
 }

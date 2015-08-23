@@ -4,23 +4,20 @@ class ThreadController extends BaseController{
     
     public static function threadList(){
         $threads = Thread::all();
-        $users = parent::get_usernames_from($threads);
-        View::make('thread/thread_list.html', array('threads' => $threads, 'users' => $users));
+        View::make('thread/thread_list.html', array('threads' => $threads));
     }
       
     public static function showThread($id){
         $messages = Message::findByThread($id);
         $thread = Thread::find($id);
-        $users = parent::get_usernames_from($messages);
-        View::make('thread/thread_show.html', array('messages' => $messages, 'thread' => $thread, 'users' => $users));
+        View::make('thread/thread_show.html', array('messages' => $messages, 'thread' => $thread));
     }
     
-    public static function postedTo($id){
-        $users = ForumUser::findUsersPostedTo($id);
+    public static function participants($id){
+        $users = ForumUser::findParticipants($id);
         $thread = Thread::find($id);
-        $amount = ForumUser::findAllPostsToThread($users, $id);
         
-        View::make('thread/thread_posted.html', array('thread' => $thread  ,'users' => $users, 'amount' => $amount));
+        View::make('thread/thread_participants.html', array('thread' => $thread  ,'users' => $users));
     }
     
     public static function createThread(){
@@ -32,6 +29,7 @@ class ThreadController extends BaseController{
         View::make('thread/thread_edit.html', array('thread' => $thread));
     }
     
+    //Creating thread
     public static function addThread(){
         $params = $_POST;
         $time = date('Y-m-d G:i:s');
@@ -55,9 +53,10 @@ class ThreadController extends BaseController{
         }
     }
     
+    //Editing thread
     public static function updateThread($id){
         $params = $_POST;
-        $oldThread = Thread::find($id);
+        $oldThread = new Thread(Thread::find($id));
         
         $attributes = $oldThread->asArray();
         $attributes['id'] = $id;
@@ -76,8 +75,10 @@ class ThreadController extends BaseController{
         }
     }
     
+    //Deleting thread (also deletes messages related to it)
+    //See: thread->delete()
     public static function destroyThread($id){
-        $thread = Thread::find($id);
+        $thread = new Thread(Thread::find($id));
         $thread->delete();
         
         Redirect::to('/thread', array('message' => 'Thread deleted.'));

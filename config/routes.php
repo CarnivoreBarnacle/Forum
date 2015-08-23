@@ -33,8 +33,8 @@
       ThreadController::showThread($id);
   });
   
-  $routes->get('/thread/:id/posted', function($id){
-      ThreadController::postedTo($id);
+  $routes->get('/thread/:id/participants', function($id){
+      ThreadController::participants($id);
   });
   
   $routes->get('/thread/:id/edit', function($id){
@@ -80,6 +80,13 @@
       LoginController::logout();
   });
   
+  $routes->get('/register', function(){
+      LoginController::register();
+  });
+  
+  $routes->post('/register', function(){
+      LoginController::createAccount();
+  });
   
   //Sandobx
   $routes->get('/hiekkalaatikko', function(){

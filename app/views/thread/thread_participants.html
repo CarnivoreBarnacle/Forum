@@ -9,7 +9,7 @@
           <tr>
               <td>
                   <a href="{{base_path}}/user/{{user.id}}">{{user.username}}</a>
-                  ({{amount[user.id]}} message{% if amount[user.id] > 1 %}s{% endif %})
+                  ({{user.amount}} message{% if user.amount > 1 %}s{% endif %})
               </td>
           </tr>
           {% endfor %}

@@ -60,6 +60,7 @@
                 </li>
                 {% endif %}
                 {% if not user_logged_in %}
+                    <li><a href="{{base_path}}/register">Register</a></li>
                     <li><a href="{{base_path}}/login">Login</a></li>
                 {% endif %}
           </ul>

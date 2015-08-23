@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>{{thread.name}}<br><small>Created: {{thread.created|date('d.m.Y H:i')}}</small>
+<h1>{{thread.name}}<small> by {{thread.username}}<br>Created: {{thread.created|date('d.m.Y H:i')}}</small>
       <br>
-      <a href="{{base_path}}/thread/{{thread.id}}/posted" class="btn btn-default">Participants</a>
+      <a href="{{base_path}}/thread/{{thread.id}}/participants" class="btn btn-default">Participants</a>
   </h1>
   <!-- Painikkeet tähän -->
   <p>
@@ -14,7 +14,7 @@
           {% for message in messages %}
           <tr>
               <td>
-                  <a href="{{base_path}}/user/{{message.user_id}}">{{users[message.user_id]}}</a>
+                  <a href="{{base_path}}/user/{{message.user_id}}">{{message.username}}</a>
                   <br>{{message.created|date('d.m.Y H:i')}}<br>
                   {% if (user_logged_in.userrole == 'ADMIN' or user_logged_in.id == message.user_id) %}
                     <a  href="{{base_path}}/message/{{message.id}}/edit" class="btn btn-default btn-sm">Edit</a>

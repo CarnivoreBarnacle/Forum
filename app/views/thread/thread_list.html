@@ -29,7 +29,7 @@
                         <a href="{{base_path}}/thread/{{thread.id}}/edit" class="btn btn-link btn-sm">Edit</a>
                     {% endif %}
                 </td>
-                <td><a href="{{base_path}}/user/{{thread.user_id}}">{{users[thread.user_id]}}</a></td>
+                <td><a href="{{base_path}}/user/{{thread.user_id}}">{{thread.username}}</a></td>
                 <td>{{thread.created|date('d.m.Y H:i')}}</td>
                 <td>{{thread.lastpost|date('d.m.Y H:i')}}</td>
             </tr>

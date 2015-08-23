@@ -8,38 +8,61 @@ class Message extends BaseModel{
         $this->validators = array('validateContent');
     }
     
-    //Quite possibly not actually needed
+    //Gets all messages from database (UNUSED)
     public static function all(){
-        $statement = 'SELECT * FROM message ORDER BY created ASC';
-        $messages = DatabaseService::get($statement, 'message');
+        $statement = 'SELECT message.*, forumuser.username'
+                . ' FROM message'
+                . ' LEFT JOIN forumuser'
+                . ' ON message.user_id = forumuser.id'
+                . ' ORDER BY created ASC';
+        $messages = DatabaseService::get($statement);
         
         return $messages;
     }
-
+    
+    //Finds message from database by id
     public static function find($id){
-        $statement = 'SELECT * FROM Message WHERE id = :id';
+        $statement = 'SELECT message.*, forumuser.username'
+                . ' FROM message'
+                . ' LEFT JOIN forumuser'
+                . ' ON message.user_id = forumuser.id'
+                . ' WHERE message.id = :id'
+                . ' ORDER BY created ASC';
         $values = array('id' => $id);
-        $message = DatabaseService::get($statement, 'message', $values, TRUE);
+        $message = DatabaseService::get($statement, $values, TRUE);
         
         return $message;
     }
     
+    //Finds messages by thread id
     public static function findByThread($thread_id){
-        $statement = 'SELECT * FROM Message WHERE thread_id = :thread_id ORDER BY created ASC';
+        $statement = 'SELECT message.*, forumuser.username'
+                . ' FROM message'
+                . ' LEFT JOIN forumuser'
+                . ' ON message.user_id = forumuser.id'
+                . ' WHERE message.thread_id = :thread_id'
+                . ' ORDER BY created ASC';
         $values = array('thread_id' => $thread_id);
-        $messages = DatabaseService::get($statement, 'message', $values);
+        $messages = DatabaseService::get($statement, $values);
         
         return $messages;
     }
     
+    //Finds messages by user id
     public static function findByUser($user_id){
-        $statement = 'SELECT * FROM Message WHERE user_id = :user_id ORDER BY created ASC';
+        $statement = 'SELECT message.*, forumuser.username'
+                . ' FROM message'
+                . ' LEFT JOIN forumuser'
+                . ' ON message.user_id = forumuser.id'
+                . ' WHERE message.user_id = :user_id'
+                . ' ORDER BY created ASC';
         $values = array('user_id' => $user_id);
-        $messages = DatabaseService::get($statement, 'message', $values);
+        $messages = DatabaseService::get($statement, $values);
         
         return $messages;
     }
     
+    //Saves message
     public function save(){
         $statement = 'INSERT INTO message (user_id, thread_id, content, created) VALUES (:user_id, :thread_id, :content, :created) RETURNING id';
         $values = $this->asArray();
@@ -49,6 +72,7 @@ class Message extends BaseModel{
         $this->id = $row['id'];
     }
     
+    //Updates message
    public function update(){
         $statement = 'UPDATE message SET content=:content, modified=:modified WHERE id=:id';
         $values = array('id' => $this->id, 'modified'=> $this->modified, 'content' => $this->content);
@@ -56,6 +80,7 @@ class Message extends BaseModel{
         DatabaseService::save($statement, $values);
     }
     
+    //Deletes message
     public function delete(){
         $statement = 'DELETE FROM message WHERE id=:id';
         $values = array('id' => $this->id);
