@@ -48,12 +48,12 @@ class Message extends BaseModel{
         return $messages;
     }
     
-    //Finds messages by user id
+    //Finds messages by user id (joins thread name to messages)
     public static function findByUser($user_id){
-        $statement = 'SELECT message.*, forumuser.username'
+        $statement = 'SELECT message.*, thread.name as thread_name'
                 . ' FROM message'
-                . ' LEFT JOIN forumuser'
-                . ' ON message.user_id = forumuser.id'
+                . ' LEFT JOIN thread'
+                . ' ON message.thread_id = thread.id'
                 . ' WHERE message.user_id = :user_id'
                 . ' ORDER BY created ASC';
         $values = array('user_id' => $user_id);

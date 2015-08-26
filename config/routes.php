@@ -88,6 +88,11 @@
       LoginController::createAccount();
   });
   
+  //User
+  $routes->get('/user/:id', function($id){
+      UserController::userPage($id);
+  });
+
   //Sandobx
   $routes->get('/hiekkalaatikko', function(){
       MainController::sandbox(); 

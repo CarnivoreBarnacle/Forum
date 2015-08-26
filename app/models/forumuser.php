@@ -5,6 +5,7 @@ class ForumUser extends BaseModel{
     
     public function __construct($attributes) {
         parent::__construct($attributes);
+        $this->validators = array('validateUsername', 'validatePassword');
     }
     
     //Return all user from database (UNUSED)
@@ -19,6 +20,15 @@ class ForumUser extends BaseModel{
     public static function find($id){
         $statement = 'SELECT * FROM forumuser WHERE id = :id';
         $values = array('id' => $id);
+        $user = DatabaseService::get($statement, $values, TRUE);
+        
+        return $user;
+    }
+    
+    //Finds single user by username
+    public static function findByUsername($username){
+        $statement = 'SELECT * FROM forumuser WHERE username = :username';
+        $values = array('username' => $username);
         $user = DatabaseService::get($statement, $values, TRUE);
         
         return $user;
@@ -52,7 +62,7 @@ class ForumUser extends BaseModel{
         $statement = 'SELECT forumuser.id, forumuser.username, thread_user.amount FROM forumuser '
                 . ' INNER JOIN thread_user'
                 . ' ON forumuser.id = thread_user.user_id'
-                . ' WHERE thread_user.thread_id = :thread_id';
+                . ' WHERE thread_user.thread_id = :thread_id ORDER BY amount';
         $values = array('thread_id' => $thread_id);
         
         $users = DatabaseService::get($statement, $values);
@@ -99,5 +109,39 @@ class ForumUser extends BaseModel{
         $values = array('user_id' => $user_id, 'thread_id' => $thread_id);
         
         DatabaseService::execute($statement, $values);
+    }
+    
+    //Validators
+    public function validateUsername(){
+        $errors = array();
+        
+        if(!parent::validate_string_not_empty($this->username)){
+            $errors[] = 'Username must not be empty';
+        }
+        if(!parent::validate_string_max($this->username, 20)){
+            $errors[] = 'Username must not be longer than 20 characters';
+        }
+        
+        $user = ForumUser::findByUsername($this->username);
+        if($user){
+            $errors[] = 'Username taken!';
+        }
+        
+        
+        return $errors;
+    }
+    
+    public function validatePassword(){
+        $errors = array();
+        
+        if(!parent::validate_string_not_empty($this->password)){
+            $errors[] = 'Password must not be empty';
+        }
+        if(!parent::validate_string_max($this->password, 20)){
+            $errors[] = 'Password must not be longer than 20 characters';
+        }
+        
+        
+        return $errors;
     }
 }

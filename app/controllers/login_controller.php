@@ -35,19 +35,25 @@ class LoginController extends BaseController{
         Redirect::to('/login', array('errors' => array('You have logged out.')));
     }
     
-    //Adds user to database, sets user_id to session and redirects user to frontpage
-    //TODO: make sure username is not taken!
+    //Adds user to database, (if username not taken) sets user_id to session and redirects user to frontpage
     public static function createAccount(){
-        $params = $_POST;
+        $params = $_POST;        
         $time = date('Y-m-d G:i:s');
         $params['userrole'] = 'USER';
         $params['registered'] = $time;
         
         $user = new ForumUser($params);
-        $user->save();
+        
+        
+        $errors = $user->errors();
+        if(count($errors) == 0){
+            $user->save();
 
-        $_SESSION['user'] = $user->id;
+            $_SESSION['user'] = $user->id;
 
-        Redirect::to('/', array('message'=>'Welcome '.$user->username));
+            Redirect::to('/', array('message'=>'Welcome '.$user->username));
+        }else{
+            View::make('register.html', array('errors' => $errors));
+        }
     }
 }

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{user.username}}<small><br>Registered: {{user.registered|date('d.m.Y H:i')}}</small></h1>
+
+<h2>Messages</h2>
+  <table class="table table-striped">
+      <tbody>
+          {% for message in messages %}
+          <tr>
+              <td><p>In thread: {{message.thread_name}}</p></td>
+              <td>
+                  <a href="{{base_path}}/user/{{user.id}}">{{user.username}}</a>
+                  <br>{{message.created|date('d.m.Y H:i')}}<br>
+              </td>
+              <td>
+                  <p>{{message.content}}</p>
+                  {% if message.modified > message.created %}
+                  <p class="text-muted">Last modified: {{message.modified|date('d.m.Y H:i')}}</p>
+                  {% endif %}
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+<h2>Threads</h2>
+<table class="table table-striped">
+      <tbody>
+          {% for thread in threads %}
+          <tr>
+              <td>
+                  <a href="{{base_path}}/user/{{thread.user_id}}">{{thread.username}}</a>
+                  <br>{{thread.created|date('d.m.Y H:i')}}<br>
+              </td>
+              <td>
+                  <p>{{thread.name}}</p>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+{% endblock %}

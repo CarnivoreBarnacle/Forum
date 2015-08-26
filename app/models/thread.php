@@ -69,15 +69,16 @@ class Thread extends BaseModel{
         DatabaseService::save($statement, $values);
     }
     
-    //Removes thread and every message related to it
-    //TODO: Remove assosiated thread_user rows as well
+    //Removes thread and every message related to it as well as all thread_user rows related to it
     public function delete(){
         $statement1 = 'DELETE FROM thread WHERE id=:id';
         //To delete all messages posted to thread
         $statement2 = 'DELETE FROM message WHERE thread_id=:id';
+        $statement3 = 'DELETE FROM thread_user WHERE thread_id=:id';
         
         $values = array('id' => $this->id);
         
+        DatabaseService::execute($statement3, $values);
         DatabaseService::execute($statement2, $values);
         DatabaseService::execute($statement1, $values);
     }
